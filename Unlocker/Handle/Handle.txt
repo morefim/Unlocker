@@ -1,0 +1,12 @@
+
+explorer.exe       pid: 9652   type: File          2848: C:\Users\emorduho\Documents\Visual Studio 2019\Unlocker\Handle
+explorer.exe       pid: 9652   type: File          6720: C:\Users\emorduho\Documents\Visual Studio 2019\Unlocker
+explorer.exe       pid: 9652   type: File          761C: C:\Users\emorduho\Documents\Visual Studio 2019\Unlocker\Handle
+explorer.exe       pid: 9652   type: File          F1D4: C:\Users\emorduho\Documents\Visual Studio 2019\Unlocker
+WINWORD.EXE        pid: 19928  type: File           CDC: C:\Users\emorduho\Documents\Visual Studio 2019\Unlocker\test.docx
+cmd.exe            pid: 18484  type: File           20C: C:\Users\emorduho\Documents\Visual Studio 2019\Unlocker\Handle
+handle.exe         pid: 24740  type: File            8C: C:\Users\emorduho\Documents\Visual Studio 2019\Unlocker\Handle
+handle64.exe       pid: 15868  type: File            4C: C:\Users\emorduho\Documents\Visual Studio 2019\Unlocker\Handle
+
+
+-c CDC -p 19928 -y
