@@ -1,0 +1,35 @@
+#pragma once
+
+//////////////////////////////////////////////////////////////////////////////////////
+//
+// SystemInfoUtils
+//
+//////////////////////////////////////////////////////////////////////////////////////
+
+// Helper functions
+
+class SystemInfoUtils
+{
+public:
+
+	//////////////////////////////////////////////////////////////////////////////////
+	// String conversion functions
+
+	// From wide char string to CString
+	static void LPCWSTR2CString(LPCWSTR strW, CString& str);
+	// From unicode string to CString
+	static void Unicode2CString(UNICODE_STRING* strU, CString& str);
+
+	//////////////////////////////////////////////////////////////////////////////////
+	// File name conversion functions
+
+	static BOOL GetDeviceFileName(LPCTSTR, CString&);
+	static BOOL GetFsFileName(LPCTSTR, CString&);
+
+	//////////////////////////////////////////////////////////////////////////////////
+	// Information functions
+
+	static DWORD GetNTMajorVersion();
+	static std::string GetLastErrorStdStr();
+	static int print_log(const char* format, ...);
+};
