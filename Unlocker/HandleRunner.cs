@@ -54,19 +54,20 @@ namespace Unlocker
 
             foreach (var outputLine in outputLines.Skip(3))
             {
-                var outputParts = outputLine.Split(new[] { "  " }, StringSplitOptions.RemoveEmptyEntries);
+                var outputParts = outputLine.Split(new[] { "pid:", "type:", "  " }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(o => o.Trim()).Where(o => o.Length > 0).ToArray();
                 if (outputParts.Length < 4)
                 {
                     retVal.Add(new LockedFileInfo { Status = outputLine });
                     continue;
                 }
                 var fileParts = outputParts[3].Split(new[] { ": " }, StringSplitOptions.RemoveEmptyEntries);
-                var handle = fileParts.First().Trim(new[] { ':', ' ' });
+                var handle = fileParts.First().Trim(':', ' ');
                 var lockedFileInfo = new LockedFileInfo
                 {
                     Process = outputParts[0],
-                    PID = int.Parse(outputParts[1].Split().Last()),
-                    Type = outputParts[2].Split().Last(),
+                    PID = int.Parse(outputParts[1]),
+                    Type = outputParts[2],
                     Handle = handle,
                     File = fileParts.Last().Trim(),
                 };
