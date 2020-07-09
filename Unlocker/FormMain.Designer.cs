@@ -103,9 +103,12 @@
             this.Controls.Add(this.buttonKill);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.filesList);
+            this.HelpButton = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(350, 180);
             this.Name = "FormMain";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Unlocker";
             this.ResumeLayout(false);
 

@@ -34,13 +34,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_64B030EC46C1AA6DF65479652E955FDB"
+        "OwnerKey" = "8:_FB2A2F356C3F4C178B8FC6A16B43E1B1"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_FB2A2F356C3F4C178B8FC6A16B43E1B1"
+        "OwnerKey" = "8:_64B030EC46C1AA6DF65479652E955FDB"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -245,15 +245,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Unlocker"
-        "ProductCode" = "8:{8CEB9767-80BA-4883-8BE2-8912767E8211}"
-        "PackageCode" = "8:{60888F90-5ABB-47B1-ABB7-BA807E136C4E}"
+        "ProductCode" = "8:{A8F859B1-B78F-40FF-9071-C00C356D25EF}"
+        "PackageCode" = "8:{E8E43813-CED8-4B65-A61D-DA88D0D99307}"
         "UpgradeCode" = "8:{3F612202-F3D1-458F-BE21-308D56993247}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.0"
+        "ProductVersion" = "8:1.0.1"
         "Manufacturer" = "8:Morpheus"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -997,7 +997,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_FB2A2F356C3F4C178B8FC6A16B43E1B1"
             {
-            "SourcePath" = "8:..\\Unlocker\\obj\\x64\\Debug\\Unlocker.exe"
+            "SourcePath" = "8:..\\Unlocker\\obj\\Release\\Unlocker.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_A2E538267F934EE39EDEB8178C762340"

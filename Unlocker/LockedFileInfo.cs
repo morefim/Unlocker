@@ -10,7 +10,6 @@ namespace Unlocker
         public string Handle { get; internal set; }
         public string File { get; internal set; }
         public uint HandleHex => Convert.ToUInt32("0x" + Handle, 16);
-
         public string Status { get; internal set; }
     }
 }

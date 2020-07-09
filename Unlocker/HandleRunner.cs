@@ -14,6 +14,26 @@ namespace Unlocker
         x64,
     }
 
+    /// <summary>
+    /// Nthandle v4.22 - Handle viewer
+    ///  Copyright(C) 1997-2019 Mark Russinovich
+    ///  Sysinternals - www.sysinternals.com
+    ///  
+    ///  usage: handle[[-a[-l]][-u] | [-c<handle> [-y]] | [-s]] [-p<process>|<pid>] [name] [-nobanner]
+    ///    -a Dump all handle information.
+    ///    -l Just show pagefile-backed section handles.
+    ///    -c Closes the specified handle(interpreted as a hexadecimal number).
+    ///               You must specify the process by its PID.
+    ///               WARNING: Closing handles can cause application or system instability.
+    ///    -y Don't prompt for close handle confirmation.
+    ///    -s Print count of each type of handle open.
+    ///    -u Show the owning user name when searching for handles.
+    ///    -p Dump handles belonging to process (partial name accepted).
+    ///    name Search for handles to objects with<name>(fragment accepted).
+    ///    -nobanner Do not display the startup banner and copyright message.
+    ///
+    /// No arguments will dump all file references.
+    /// </summary>
     class HandleUnlocker
     {
         private readonly ProcessorType _processorType;
@@ -46,30 +66,28 @@ namespace Unlocker
             var retVal = new List<LockedFileInfo>();
             fileOrFolder = fileOrFolder.TrimEnd('\\');
             Debug.WriteLine("Querying handle...");
-            var outputString = RunProcessAndReadOutput(HandleExePath, $"\"{fileOrFolder}\"", Timeout);
+            var outputString = RunProcessAndReadOutput(HandleExePath, $"\"{fileOrFolder}\" -nobanner", Timeout);
             Debug.WriteLine(outputString);
-            // WINWORD.EXE pid: 18600  type: File C3C: C: \Users\emorduho\Documents\Visual Studio 2019\Unlocker\UnlockerTest\test.docx
+            // WINWORD.EXE pid: 18600  type: File C3C: C:\Unlocker\UnlockerTest\test.docx
             var outputLines = outputString.Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
-            if (outputLines.Length < 4) return retVal;//throw new ArgumentException($"Insufficient agruments: {outputString}");
+            if (outputLines.Length < 4) return retVal;
 
             foreach (var outputLine in outputLines.Skip(3))
             {
-                var outputParts = outputLine.Split(new[] { "pid:", "type:", "  " }, StringSplitOptions.RemoveEmptyEntries)
+                var outputParts = outputLine.Split(new[] { "pid:", "type:", "  ", ": " }, StringSplitOptions.RemoveEmptyEntries)
                     .Select(o => o.Trim()).Where(o => o.Length > 0).ToArray();
-                if (outputParts.Length < 4)
+                if (outputParts.Length < 5)
                 {
                     retVal.Add(new LockedFileInfo { Status = outputLine });
                     continue;
                 }
-                var fileParts = outputParts[3].Split(new[] { ": " }, StringSplitOptions.RemoveEmptyEntries);
-                var handle = fileParts.First().Trim(':', ' ');
                 var lockedFileInfo = new LockedFileInfo
                 {
                     Process = outputParts[0],
                     PID = int.Parse(outputParts[1]),
                     Type = outputParts[2],
-                    Handle = handle,
-                    File = fileParts.Last().Trim(),
+                    Handle = outputParts[3],
+                    File = outputParts[4],
                 };
                 retVal.Add(lockedFileInfo);
             }
@@ -80,7 +98,7 @@ namespace Unlocker
         {
             Debug.WriteLine("Unlocking handle...");
             // -c C3C -p 18600 -y
-            var args = $"-c {lockedFileInfo.Handle} -p {lockedFileInfo.PID} -y";
+            var args = $"-c {lockedFileInfo.Handle} -p {lockedFileInfo.PID} -y -nobanner";
             var outputString = RunProcessAndReadOutput(HandleExePath, args, Timeout);
             Debug.WriteLine(outputString);
         }
@@ -99,7 +117,6 @@ namespace Unlocker
                 process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 process.StartInfo.CreateNoWindow = true;
                 process.StartInfo.UseShellExecute = false;
-                //process.StartInfo.Verb = "runas";
                 process.EnableRaisingEvents = false;
                 process.OutputDataReceived += (sender, eventArgs) => outputStringBuilder.AppendLine(eventArgs.Data);
                 process.ErrorDataReceived += (sender, eventArgs) => outputStringBuilder.AppendLine(eventArgs.Data);
