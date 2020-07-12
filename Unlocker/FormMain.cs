@@ -68,11 +68,20 @@ namespace Unlocker
             Close();
         }
 
-        private Control[] ControlsToLock => new Control[] { buttonKill, buttonRefresh, buttonUnlock };
+        private Control[] ControlsToLock => new Control[] { buttonKill, buttonRefresh, buttonUnlock, };
+
+        public string Status 
+        { 
+            get => toolStripStatusLabel.Text; 
+            internal set 
+            {
+                toolStripStatusLabel.Text = value;
+            } 
+        }
 
         private void FormMain_HelpButtonClicked(object sender, CancelEventArgs e)
         {
-
+            aboutToolStripMenuItem_Click(sender, e);
         }
 
         private void buttonUnlock_Click(object sender, EventArgs e)
@@ -88,6 +97,7 @@ namespace Unlocker
                     }
                     catch (Exception ex)
                     {
+                        Status = ex.Message;
                         MessageBox.Show(ex.ToString());
                     }
                 }
@@ -111,6 +121,7 @@ namespace Unlocker
                     }
                     catch (Exception ex)
                     {
+                        Status = ex.Message;
                         MessageBox.Show(ex.ToString());
                     }
                 }
@@ -154,9 +165,34 @@ namespace Unlocker
             // Test if the About item was selected from the system menu
             if ((m.Msg == WM_SYSCOMMAND) && ((int)m.WParam == SYSMENU_ABOUT_ID))
             {
-                var aboutBox = new AboutBox();
-                aboutBox.ShowDialog();
+                aboutToolStripMenuItem_Click(this, null);
             }
+        }
+
+        private void unlockToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            buttonUnlock_Click(sender, e);
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var aboutBox = new AboutBox();
+            aboutBox.ShowDialog();
+        }
+
+        private void killProcessToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            buttonKill_Click(sender, e);
+        }
+
+        private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            buttonRefresh_Click(sender, e);
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            buttonCancel_Click(sender, e);
         }
     }
 }

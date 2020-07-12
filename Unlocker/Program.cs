@@ -27,6 +27,7 @@ namespace Unlocker
                 _mainForm = new FormMain(path);
                 _mainForm.Unlock += MainForm_Unlock;
                 _mainForm.RefreshFilesInfo += MainForm_RefreshFilesInfo;
+                _handleUnlocker.Status += HandleUnlocker_Status;
                 _mainForm.Show();
                 Application.DoEvents();
 
@@ -41,6 +42,11 @@ namespace Unlocker
             {
                 MessageBox.Show(e.ToString());
             }
+        }
+
+        private static void HandleUnlocker_Status(string status)
+        {
+            _mainForm.Status = status;
         }
 
         private static System.Collections.Generic.List<LockedFileInfo> MainForm_RefreshFilesInfo(string path)

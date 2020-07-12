@@ -39,6 +39,9 @@ namespace Unlocker
         private readonly ProcessorType _processorType;
         private readonly int _timeout;
 
+        public delegate void HandleUnlockerStatusEventHandler(string status);
+        public event HandleUnlockerStatusEventHandler Status;
+
         public HandleUnlocker(ProcessorType processorType, int timeout)
         {
             _timeout = timeout;
@@ -53,7 +56,10 @@ namespace Unlocker
                 if (lockedFileInfo.First().PID != 0)
                     UnlockFile(lockedFileInfo.First());
                 else
+                {
+                    Status(lockedFileInfo.First().Status);
                     MessageBox.Show(lockedFileInfo.First().Status);
+                }
             }
         }
 
@@ -66,8 +72,10 @@ namespace Unlocker
             var retVal = new List<LockedFileInfo>();
             fileOrFolder = fileOrFolder.TrimEnd('\\');
             Debug.WriteLine("Querying handle...");
+            Status("Querying handle...");
             var outputString = RunProcessAndReadOutput(HandleExePath, $"\"{fileOrFolder}\" -nobanner", Timeout);
             Debug.WriteLine(outputString);
+            Status(outputString);
             // WINWORD.EXE pid: 18600  type: File C3C: C:\Unlocker\UnlockerTest\test.docx
             var outputLines = outputString.Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
             if (outputLines.Length < 4) return retVal;
@@ -97,10 +105,12 @@ namespace Unlocker
         public void UnlockFile(LockedFileInfo lockedFileInfo)
         {
             Debug.WriteLine("Unlocking handle...");
+            Status("Unlocking handle...");
             // -c C3C -p 18600 -y
             var args = $"-c {lockedFileInfo.Handle} -p {lockedFileInfo.PID} -y -nobanner";
             var outputString = RunProcessAndReadOutput(HandleExePath, args, Timeout);
             Debug.WriteLine(outputString);
+            Status(outputString);
         }
 
         string RunProcessAndReadOutput(string processPath, string args, int processTimeout)
@@ -130,11 +140,13 @@ namespace Unlocker
                 if (processExited == false) // we timed out...
                 {
                     process.Kill();
+                    Status("ERROR: Process took too long to finish");
                     throw new Exception("ERROR: Process took too long to finish");
                 }
                 else if (process.ExitCode != 0)
                 {
                     var output = outputStringBuilder.ToString();
+                    Status($"Process exited with non-zero exit code of: {process.ExitCode + Environment.NewLine} Output from process: {output}");
                     Debug.WriteLine("Process exited with non-zero exit code of: " + process.ExitCode + Environment.NewLine +
                     "Output from process: " + output);
                     return output;
